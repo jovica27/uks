@@ -2,6 +2,11 @@ language: python
 python:
   - "2.7"
 
+variables:
+  imageName: 'djangoproject'
+  dockerId: jovica27
+dockerPassword: lajkaimeda1!
+
 services:
   - docker
 
@@ -12,18 +17,29 @@ install:
 # script:
 # - python manage.py test vsc
 
-script:
-  - docker-compose up -d
-  - docker logs djangoproject_web
-  - docker images
-  - docker ps -a
-  - bash starttest.sh
 
-deploy:
-  provider: script
-  script: bash docker_push
-  on:
-    branch: master
+#script:
+#  - docker-compose up -d
+#  - docker logs djangoproject_web
+#  - docker images
+#  - docker ps -a
+#  - bash start.sh
+
+- script: |
+    docker build -f Dockerfile -t $(dockerId)/$(imageName) .
+    docker login -u $(dockerId) -p $pswd
+    docker push $(dockerId)/$(imageName)
+    docker-compose up
+    
+  env:
+    pswd: $(dockerPassword)
+  displayName: 'Build and push Docker image'
+
+#deploy:
+#  provider: script
+#  script: bash docker_push
+#  on:
+#    branch: master
 
 
 
