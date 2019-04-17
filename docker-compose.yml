@@ -12,7 +12,7 @@ services:
 
   web:
     container_name: uks_web
-    image: djangoproject
+    image: jovica27/djangoproject
 #    build: .
     command: ["./wait_for_postgres.sh"]
     expose:
